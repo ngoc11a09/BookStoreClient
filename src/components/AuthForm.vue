@@ -1,6 +1,4 @@
 <template>
-    <div :class="['text-h2', 'pa-2', 'my-10']" class="text-center text-blue-grey-darken-2">Sign Up</div>
-
     <form @submit.prevent="submit" class="w-25 mx-auto">
         <v-text-field v-model="username.value.value" :counter="25" :error-messages="username.errorMessage.value"
             label="Username"></v-text-field>
@@ -8,9 +6,8 @@
         <v-text-field type="password" v-model="password.value.value" :counter="25"
             :error-messages="password.errorMessage.value" label="Password"></v-text-field>
 
-        <v-text-field v-model="email.value.value" :error-messages="email.errorMessage.value"
-            label="E-mail"></v-text-field>
-
+        <v-text-field v-model="email.value.value" :error-messages="email.errorMessage.value" label="E-mail"
+            v-if="!signin === true"></v-text-field>
 
         <v-btn class="w-100 my-5" color="green" type="submit" variant="elevated">
             Submit
@@ -23,9 +20,13 @@
 
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
-import { signUp } from '@/api/auth.api';
-import type { ISignUpData } from '@/interfaces/auth.interface';
+import type { ISignInData, ISignUpData } from '@/interfaces/auth.interface';
 import router from '@/router';
+import { useAuthStore } from '@/stores/auth.store';
+
+const props = defineProps({
+    signin: Boolean
+})
 
 const { handleSubmit, handleReset } = useForm({
     validationSchema: {
@@ -54,11 +55,19 @@ const password = useField('password')
 const email = useField('email')
 
 const submit = handleSubmit(async (values) => {
-    try {
-        await signUp(values as ISignUpData)
-        router.push('signup/info')
-    } catch (error: any) {
-        alert(error.errorMessage)
+    const authStore = useAuthStore()
+    if (props.signin) {
+        try {
+            (await authStore.signIn(values as ISignInData));
+        } catch (error: any) {
+            alert(error.message)
+        }
+    } else {
+        try {
+            (await authStore.signUp(values as ISignUpData));
+        } catch (error: any) {
+            alert(error.message)
+        }
     }
 })
 </script>

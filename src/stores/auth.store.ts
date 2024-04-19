@@ -1,6 +1,6 @@
-import { signIn } from '@/api/auth.api'
+import { signIn, signUp } from '@/api/auth.api'
 import { ACCESS_TOKEN, USER } from '@/constants/localStorage'
-import type { ISignInData } from '@/interfaces/auth.interface'
+import type { ISignInData, ISignUpData } from '@/interfaces/auth.interface'
 import router from '@/router'
 import { defineStore } from 'pinia'
 
@@ -12,15 +12,13 @@ export const useAuthStore = defineStore({
   }),
 
   actions: {
-    async signIn(data: ISignInData) {
+    async signUp(data: ISignUpData) {
       try {
-        const { message, user, accessToken } = await signIn(data)
+        const { user, accessToken } = await signUp(data)
         this.user = user
         localStorage.setItem(USER, JSON.stringify(user))
         localStorage.setItem(ACCESS_TOKEN, accessToken)
-
-        router.push(this.returnUrl || '/')
-        return message
+        router.push(`/${user._id}`)
       } catch (error) {
         return Promise.reject(error)
       }
@@ -29,7 +27,20 @@ export const useAuthStore = defineStore({
     signOut() {
       this.user = null
       localStorage.removeItem(USER)
+      localStorage.removeItem(ACCESS_TOKEN)
       router.push('/signin')
-    }
+    },
+
+    async signIn(data: ISignInData) {
+      try {
+        const { user, accessToken } = await signIn(data)
+        this.user = user
+        localStorage.setItem(USER, JSON.stringify(user))
+        localStorage.setItem(ACCESS_TOKEN, accessToken)
+        router.push('/')
+      } catch (error) {
+        return Promise.reject(error)
+      }
+    },
   }
 })

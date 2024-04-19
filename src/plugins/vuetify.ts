@@ -10,5 +10,8 @@ export default createVuetify({
   directives,
   theme: {
     defaultTheme: 'light'
-  }
+  },
+  icons: {
+    defaultSet: 'mdi',
+  },
 })
