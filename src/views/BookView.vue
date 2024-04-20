@@ -41,7 +41,8 @@
                     <td>{{ item.publisher }}</td>
                     <td>{{ formatDateTime(item.createdAt) }}</td>
                     <td class="text-center">
-                        <v-btn :disabled="item.quantity < 1" variant="tonal" @click="() => handleClickBorrow(item._id)">
+                        <v-btn :disabled="item.quantity < 1 || !user" variant="tonal"
+                            @click="() => handleClickBorrow(item._id)">
                             <v-icon icon="mdi-plus-thick"></v-icon>
                         </v-btn>
                     </td>
@@ -57,6 +58,9 @@ import type { IPublisher } from '@/interfaces/publisher.interface';
 import { onMounted, ref } from 'vue';
 import { format } from 'date-fns';
 import router from '@/router';
+import { USER } from '@/constants/localStorage';
+
+const user = JSON.parse(localStorage.getItem(USER) as string)
 
 const formatDateTime = (date: Date) => {
     return format(new Date(date), 'dd/MM/yyyy HH:mm:ss');

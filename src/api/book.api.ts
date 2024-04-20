@@ -25,7 +25,7 @@ export const getAllBooks = async () => {
         return Promise.reject(error)
     }
 }
-export const getOne = (id: string) => {
+export const getOneBook = (id: string) => {
     try {
         return (api.get(`/api/books/${id}`)) as Promise<IGetOneBookRes> || {}
     } catch (error) {

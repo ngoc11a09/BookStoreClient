@@ -23,18 +23,18 @@
                 <v-list-item class="text-blue-grey-darken-4 pa-4" to="/books" link title="Book List"
                     prepend-icon="mdi-bookshelf"></v-list-item>
                 <v-list-item class="text-blue-grey-darken-4 pa-4" to="/borrows" link title="Borrow"
-                    prepend-icon="mdi-book-education"></v-list-item>
+                    prepend-icon="mdi-book-education" :disabled="!user"></v-list-item>
                 <v-list-item class="text-blue-grey-darken-4 pa-4" :to="linkUser" link title="Account"
-                    prepend-icon="mdi-account"></v-list-item>
+                    prepend-icon="mdi-account" :disabled="!user"></v-list-item>
                 <template v-slot:append>
                     <div class="pa-2">
                         <v-btn block color="blue-grey-darken-4" @click="handleSignOut" v-if="user">
                             SIGNOUT
                         </v-btn>
-                        <v-btn block color="blue-grey-darken-4" to="signin" v-if="!user">
+                        <v-btn block color="blue-grey-darken-4" to="/signin" v-if="!user">
                             SIGNIN
                         </v-btn>
-                        <v-btn class="my-2" block color="blue-grey-darken-4" to="signup" v-if="!user">
+                        <v-btn class="my-2" block color="blue-grey-darken-4" to="/signup" v-if="!user">
                             SIGNUP
                         </v-btn>
                     </div>

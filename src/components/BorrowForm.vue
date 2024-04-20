@@ -20,10 +20,11 @@ import { useField, useForm } from 'vee-validate'
 import router from '@/router';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { getOne, type IBookRes } from '@/api/book.api';
+import { getOneBook, type IBookRes } from '@/api/book.api';
 import { USER } from '@/constants/localStorage';
 import { create, type IBorrow } from '@/api/borrow.api';
 import { Util } from '@/utils';
+import { getOne } from '@/api/user.api';
 
 const route = useRoute()
 const id = route.params.id
@@ -35,7 +36,7 @@ const allowDate = (date: any) => {
 const book = ref<IBookRes>()
 onMounted(async () => {
     try {
-        const res = await getOne(id as string)
+        const res = await getOneBook(id as string)
         book.value = res.book
     } catch (error: any) {
         alert(error.message)
@@ -53,14 +54,20 @@ const { handleSubmit, handleReset } = useForm({
 
 const date = useField<Date>('date')
 
+let uId: string
 const submit = handleSubmit(async (values) => {
     const borrowedDate: Date = (values.date?.[0] > values.date?.[1]) ? values.date?.[1] : values.date?.[0]
     const returnDate: Date = (values.date?.[0] <= values.date?.[1]) ? values.date?.[1] : values.date?.[0]
-    const uId = JSON.parse(localStorage.getItem(USER) as string).uId
     const code = `U${Util.randomInt(4)}`
     // console.log({ code, userCode: uId, borrowedDate, returnDate, bookCode: book.value?.code });
+    const id = JSON.parse(localStorage.getItem(USER) as string)._id
     try {
-
+        const user = await getOne(id)
+        uId = user.user.uId
+    } catch (error) {
+        alert('Try again!')
+    }
+    try {
         await create({ code, userCode: uId, borrowedDate, returnDate, bookCode: book.value?.code } as IBorrow)
         alert('Borrow successfully')
         router.push('/borrows')

@@ -1,4 +1,5 @@
 import api from "./api.interceptor"
+import { getOne } from "./user.api"
 
 export interface IBorrow {
     _id?: string
@@ -19,7 +20,7 @@ export const getAllBorrows = async () => {
     }
 }
 
-export const getOne = (id: string) => {
+export const getOneBorrow = (id: string) => {
     try {
         return (api.get(`/api/borrows/${id}`)) as Promise<IBorrow>
     } catch (error) {
@@ -28,9 +29,16 @@ export const getOne = (id: string) => {
     }
 }
 
-export const getBorrowOfUSer = (id: string) => {
+export const getBorrowOfUSer = async (id: string) => {
+    let user
     try {
-        return (api.get(`/api/borrows`, { params: { userCode: id } })) as Promise<IBorrow[]>
+        const res = await getOne(id)
+        user = res.user
+    } catch (error) {
+        return Promise.reject(error)
+    }
+    try {
+        return (api.get(`/api/borrows`, { params: { userCode: user.uId } })) as Promise<IBorrow[]>
     } catch (error) {
         // console.log(error);
         return Promise.reject(error)

@@ -26,7 +26,7 @@
         <v-btn class="w-100 my-5" color="green" type="submit" variant="elevated">
             Submit
         </v-btn>
-        <v-btn @click="handleReset" class="w-100 " color="red" variant="tonal">
+        <v-btn @click="handleReset" class="w-100 mb-5" color="red" variant="tonal">
             Clear
         </v-btn>
     </form>

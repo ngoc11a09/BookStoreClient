@@ -8,39 +8,39 @@
         </v-sheet>
         <v-sheet class="d-flex flex-row ga-5">
             <div class="d-flex flex-column flex-1-1 w-50 ga-2">
-                <v-card class="w-100">
+                <v-card :flat="true" class="w-100">
                     <v-card-title class="text-lg-h5">Email:</v-card-title>
                     <v-card-text class="ml-5">
                         {{ user?.email }}
                     </v-card-text>
                 </v-card>
-                <v-card class="w-100">
+                <v-card :flat="true" class="w-100">
                     <v-card-title class="text-lg-h5">Address:</v-card-title>
                     <v-card-text class="ml-5">
                         {{ district }} - {{ province }}
                     </v-card-text>
                 </v-card>
-                <v-card class="w-100">
+                <v-card :flat="true" class="w-100">
                     <v-card-title class="text-lg-h5">Phone number:</v-card-title>
                     <v-card-text class="ml-5">
                         {{ user?.phone }}
                     </v-card-text>
                 </v-card>
                 <div class="w-100 d-flex flex-row ga-5">
-                    <v-card class="w-50">
+                    <v-card :flat="true" class="w-50">
                         <v-card-title class="text-lg-h5">Gender:</v-card-title>
                         <v-card-text class="ml-5">
                             {{ gender }}
                         </v-card-text>
                     </v-card>
-                    <v-card class="w-50">
+                    <v-card :flat="true" class="w-50">
                         <v-card-title class="text-lg-h5">Age:</v-card-title>
                         <v-card-text class="ml-5">
                             {{ age }}
                         </v-card-text>
                     </v-card>
                 </div>
-                <v-card class="w-100">
+                <v-card :flat="true" class="w-100">
                     <v-card-title class="text-lg-h5">Birthday:</v-card-title>
                     <v-card-text class="ml-5">
                         {{ formatDate(birthday) }}
@@ -50,8 +50,7 @@
             <v-container class="d-flex flex-1-1 w-50">
                 <v-row class="w-100 border-sm" justify="space-around">
                     <v-date-picker :key="pickerKey" class="w-100" title="Birthday" color="blue-grey-darken-4"
-                        v-model="datePicker" />
-
+                        v-model="datePicker" :allowed-dates="allowDate" />
                 </v-row>
             </v-container>
         </v-sheet>
@@ -73,6 +72,7 @@ const datePicker = ref()
 const pickerKey = ref(0)
 const min = ref()
 const max = ref()
+const allowDate = ref()
 
 
 const formatDate = (date: Date | null | undefined) => {
@@ -113,10 +113,9 @@ onMounted(async () => {
         })
         birthday.value = toDate(user.value.birthday as Date);
         datePicker.value = new Date(birthday.value)
-        console.log(user.value.birthday)
-        console.log(toDate(user.value.birthday as Date));
         min.value = new Date(user.value.birthday!)
         max.value = new Date(user.value.birthday!)
+        allowDate.value = [new Date(user.value.birthday!)]
         pickerKey.value++;
     } catch (error: any) {
         alert(error.message)

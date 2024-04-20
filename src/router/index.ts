@@ -29,6 +29,7 @@ const router = createRouter({
       path: '/',
       name: 'layout',
       component: LayoutView,
+      meta: { requiresAuth: true },
       children: [
         {
           path: '/',
@@ -74,7 +75,6 @@ const router = createRouter({
     }
   ]
 })
-
 router.beforeEach(async (to, from, next: Function) => {
   const auth = useAuthStore()
   if (to.matched.some(record => record.meta.requiresAuth)) {

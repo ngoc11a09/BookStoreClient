@@ -24,7 +24,7 @@
             <tbody>
                 <tr v-for="item in data" :key="item.code">
                     <td>{{ item.code }}</td>
-                    <td>{{ item.bookCode }}</td>
+                    <td>{{ item.book }}</td>
                     <td>{{ formatDate(item.borrowedDate as Date) }}</td>
                     <td>{{ formatDate(item.returnDate as Date) }}</td>
                     <td>{{ formatDateTime(item.createdAt as Date) }}</td>
@@ -37,7 +37,7 @@
 import { getAllBooks, type IBookRes } from '@/api/book.api';
 import { onMounted, ref } from 'vue';
 import { format } from 'date-fns';
-import { getBorrowOfUSer, type IBorrow } from '@/api/borrow.api';
+import { getBorrowOfUSer } from '@/api/borrow.api';
 import { USER } from '@/constants/localStorage';
 
 const formatDateTime = (date: Date) => {
@@ -47,13 +47,12 @@ const formatDate = (date: Date) => {
     return format(new Date(date), 'dd/MM/yyyy');
 };
 
-const data = ref<IBorrow[]>([])
+const data = ref<any[]>([])
 let books: IBookRes[]
-
+const user = JSON.parse(localStorage.getItem(USER) as string)
 onMounted(async () => {
     try {
-        const id = JSON.parse(localStorage.getItem(USER) as string).uId
-        const res = await getBorrowOfUSer(id)
+        const res = await getBorrowOfUSer(user._id)
         try {
             books = (await getAllBooks())
             const preBooks: any = books.reduce((prev, book) => {
@@ -62,8 +61,10 @@ onMounted(async () => {
 
             data.value = res.map((item) => {
                 const book = preBooks[item.bookCode]
-                return { ...item, book: book.name }
+                return { ...item, book: book.title }
             })
+            // console.log(data.value);
+
         } catch (error: any) {
             alert(error.message)
         }

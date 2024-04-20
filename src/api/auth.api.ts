@@ -4,9 +4,10 @@ import api from './api.interceptor'
 export interface ISignInRes {
   message: string
   user: {
-    uId: string
+    _id: string
     role: 'admin' | 'user'
     username: string
+    email: string
   }
   accessToken: string
 }
@@ -23,9 +24,9 @@ export interface ISignUpRes {
   message: string
   user: {
     _id: string
-    uId: string
     username: string
     email: string
+    role: 'admin' | 'user'
   }
   accessToken: string
 }
