@@ -1,6 +1,6 @@
 <template>
   <v-sheet id="home" class="d-flex justify-center align-center text-center flex-column" color="blue-grey-darken-1"
-    min-height="600">
+    position="relative" min-height="600">
     <div class="text-h3 font-weight-medium mb-5">
       Welcome To Book Store Website
     </div>
@@ -8,8 +8,13 @@
     <div class="text-h6 font-weight-light mb-5" style="max-width: 468px;">
       Our book lending app provides a convenient platform for users to borrow and lend books.
     </div>
-
-    <div class="d-flex ga-5 flex-1-1-auto flex-wrap justify-center px-4">
+    <div class="text-about-me">
+      <div class="text-h6 font-weight-light" style="max-width: 468px;">
+        Created by Khuu Thi Bich Ngoc B2203514
+      </div>
+      <div class="text-h6 font-weight-light mb-5 float-end" style="max-width: 468px;">
+        Email: ngocb2203514@student.ctu.edu.vn
+      </div>
     </div>
   </v-sheet>
   <v-sheet id="features" class="text-center py-16">
@@ -126,5 +131,11 @@ const features = [
       'Engage with us: Start a conversation today and let us assist you every step of the way. Chat with us for personalized support and expert guidance.',
   },
 ]
-
 </script>
+<style>
+.text-about-me {
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+}
+</style>
